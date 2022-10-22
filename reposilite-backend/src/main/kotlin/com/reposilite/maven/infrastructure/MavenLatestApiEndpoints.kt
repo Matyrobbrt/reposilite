@@ -136,7 +136,8 @@ internal class MavenLatestApiEndpoints(
                     repository = it,
                     handler = { lookupRequest ->
                         mavenFacade.findFile(lookupRequest).map { (details, file) ->
-                            ctx.resultAttachment(details.name, details.contentType, details.contentLength, compressionStrategy, file)
+                            val compress = mavenFacade.getRepository(lookupRequest.repository)!!.compress
+                            ctx.resultAttachment(details.name, details.contentType, details.contentLength, compressionStrategy, compress, file)
                         }
                     }
                 )
