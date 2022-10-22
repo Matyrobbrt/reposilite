@@ -25,6 +25,7 @@ import io.javalin.http.Context
 import io.javalin.http.HandlerType.HEAD
 import io.javalin.http.HandlerType.OPTIONS
 import io.javalin.http.HttpStatus
+import io.javalin.http.util.ETagGenerator
 import org.eclipse.jetty.server.HttpOutput
 import panda.std.Result
 import java.io.Closeable
@@ -86,18 +87,23 @@ internal fun Context.resultAttachment(
     contentType: ContentType,
     contentLength: Long,
     compressionStrategy: String,
+    compress: Boolean,
     data: InputStream
 ) {
     if (!contentType.isHumanReadable) {
         contentDisposition("""attachment; filename="$name"; filename*=utf-8''${URLEncoder.encode(name, "utf-8")}""")
     }
 
-    if (compressionStrategy == "none" && contentLength > 0) {
+    if ((!compress || compressionStrategy == "none") && contentLength > 0) {
         contentLength(contentLength) // Using this with GZIP ends up with "Premature end of Content-Length delimited message body".
     }
 
     when {
-        acceptsBody() -> result(data)
+        acceptsBody() -> if (compress) {
+            result(data)
+        } else {
+            data.copyTo(res().outputStream, 4096)
+        }
         else -> data.silentClose()
     }
 

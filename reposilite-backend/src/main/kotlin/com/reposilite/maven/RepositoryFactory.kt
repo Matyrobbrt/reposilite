@@ -49,7 +49,8 @@ internal class RepositoryFactory(
                 workingDirectory = workingDirectory.resolve(repositoriesDirectory),
                 repository = repositoryName,
                 storageSettings = configuration.storageProvider
-            ) ?: throw IllegalArgumentException("Unknown storage provider '${configuration.storageProvider.type}'")
+            ) ?: throw IllegalArgumentException("Unknown storage provider '${configuration.storageProvider.type}'"),
+            configuration.useCompression
         )
 
     private fun createProxiedHostConfiguration(configurationSource: ProxiedRepository): ProxiedHost {

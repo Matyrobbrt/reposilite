@@ -34,7 +34,9 @@ data class RepositorySettings(
     @Doc(title = "Storage provider", description = "The storage type of this repository.")
     val storageProvider: StorageProviderSettings = FileSystemStorageProviderSettings(),
     @Doc(title = "Mirrored repositories", description = "List of mirrored repositories associated with this repository.")
-    val proxied: List<ProxiedRepository> = listOf()
+    val proxied: List<ProxiedRepository> = listOf(),
+    @Doc(title = "Use compression", description = "If compression is enabled, should the files be uploaded with compression.")
+    val useCompression: Boolean = true
 ) : SharedSettings
 
 @Doc(title = "Mirrored Maven Repository", description = "Configuration of proxied host")

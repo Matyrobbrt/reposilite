@@ -32,6 +32,7 @@ class Repository internal constructor(
     val preserveSnapshots: Boolean,
     val proxiedHosts: List<ProxiedHost>,
     private val storageProvider: StorageProvider,
+    val compress: Boolean
 ) {
 
     init {
